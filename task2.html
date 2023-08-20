@@ -4,27 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homework</title>
+    <style>
+        #newApp {
+            background-color: aliceblue;
+            padding: 40px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        button {
+            border: none;
+            box-shadow: 0px 10px 20px 0px rgba(192, 192, 192, 0.35);
+            background-color: #fff;
+            padding: 10px 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: cadetblue;
+        }
+
+        .products__list {
+            display: flex;
+            gap: 30px;
+        }
+
+        .products__li {
+            list-style: none;
+        }
+
+        .product__card {
+            width: 150px;
+            border: 1px solid gray;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0px 10px 20px 0px rgba(192, 192, 192, 0.35);
+        }
+    </style>
 </head>
 <body>
-    <!-- Задачи по vue
-Создать кнопку "Перевернуть". При клике на кнопку текст кнопки, должен перевернуться и отобразиться в обратном порядке.
-есть список элементов. Пользователь может добавлять новые элементы списка с текстом “Новый элемент списка” нажав на кнопку "Добавить".
-* При клике на элемент списка он должен быть удален. (по желанию) -->
+    <!-- Вы разрабатываете приложение для отображения и сортировки списка товаров. У вас есть массив объектов products, где каждый объект представляет товар с его названием и ценой. Вам необходимо отобразить список товаров и предоставить пользователю возможность сортировать товары по цене (по возрастанию и по убыванию). -->
     <div id="newApp">
 
-        <p>Создать кнопку "Перевернуть". При клике на кнопку текст кнопки, должен перевернуться и отобразиться в обратном порядке.</p>
+        <div class="buttons">
+            <button @click="priceUp">Сортировать по возрастанию цены</button>
+            <button @click="priceDown">Сортировать по убыванию цены</button>
+        </div>
 
-        <button @click="reverse">{{ btnName }}</button>
+        <h2>Товары:</h2>
 
-        <p>Есть список элементов. <br>Пользователь может добавлять новые элементы списка с текстом “Новый элемент списка” нажав на кнопку "Добавить"<br>
-        * При клике на элемент списка он должен быть удален. (по желанию)</p>
-
-        <ul class="list">
-            <li @click="hidden">Первый элемент списка</li>
-            <li  @click="hidden">Второй элемент списка</li>
-            <li @click="hidden">Третий элемент списка</li>
+        <ul class="products__list">
+            <li class="products__li" v-for="product in products">
+                <div class="product__card">
+                    <p>Название: {{product.name}}</p>
+                    <p>Цена: {{product.price}} </p>
+                </div>
+            </li>
         </ul>
-        <button @click="addNewLi">Добавить</button>
 
     </div>
 
@@ -34,22 +82,22 @@
     var app = new Vue({
     el: '#newApp',
     data: {
-        btnName: 'Перевернуть',
+        products: [
+            {name: "T-shirt", price: 200},
+            {name: "Jeans", price: 800},
+            {name: "Jacket", price: 600},
+            {name: "Hat", price: 400},
+            {name: "Socks", price: 200}
+        ],
     },
     methods: {
-        reverse() {
-            this.btnName = this.btnName.split('').reverse().join('');
+        priceUp() {
+            let result = this.products.sort((a, b) => a.price - b.price);
+            this.products = result;
         },
-        addNewLi() {
-            let list = document.querySelector('.list');
-            let newLi = document.createElement('li');
-            newLi.innerHTML = 'Новый элемент списка';
-            list.append(newLi);
-            newLi.setAttribute(`v-on:click`, 'hidden');
-        },
-        hidden(event) {
-            let element = event.currentTarget;
-            element.style.display = 'none';
+        priceDown() {
+            let result = this.products.sort((a, b) => b.price - a.price);
+            this.products = result;
         }
     },
     })
